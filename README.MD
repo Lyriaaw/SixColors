@@ -1,2 +1,1 @@
 Six Color Game
-Ë
