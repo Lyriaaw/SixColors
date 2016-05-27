@@ -93,13 +93,12 @@ public class TableGame {
         grid = generateRandomGrid(gridSize);
 
 
-        // Creating players #TODO
+        // Creating players
         for (int it = 0; it < playerAmount; it++) {
 
             currentPlayer = new Player(it + 1);
             currentPlayer.setCurrentCaseColor(CaseColor.values()[it]);
 
-            // TODO : define an auto Layout depending on the amount of player
             if (it == 0) {
                 currentPlayer.addCase(grid[0][0]);
             } else if (it == 1){
@@ -128,9 +127,9 @@ public class TableGame {
         // setting the selectedColor to the player
         currentPlayer.setNewColor(selectedCaseColor);
 
-        /*
-        TODO : Future case infection
-         */
+
+        infectGridWithColor(currentPlayer);
+
 
         // running throw players
         playerIndex++;
@@ -138,6 +137,18 @@ public class TableGame {
 
         // setting the new currentPlayer
         currentPlayer = playerList.get(playerIndex);
+
+    }
+
+
+
+
+    public void infectGridWithColor(Player player) {
+
+        // start the infection from the first case of the pplayer
+        grid = currentPlayer.getBelongedCases().get(0).infectNeighbour(grid, player);
+
+        //displayGrid();
 
     }
 
@@ -171,7 +182,7 @@ public class TableGame {
 
         for (int jt = 0; jt < size; jt++) {
             for (int it = 0; it < size; it++) {
-                grid[jt][it] = new Case();
+                grid[jt][it] = new Case(it, jt);
             }
         }
         return grid;
@@ -197,6 +208,20 @@ public class TableGame {
 
         System.out.println("Grid dimension : " + gridSize + " * " + gridSize + "\n");
 
+    }
+
+
+    /**
+     * Return the safe coordinate of a index (V and H)
+     * Avoid IndexArrayOutOfBoundException
+     *
+     * @param askedCoordinate
+     * @return
+     */
+    public static int getSafeCoordinate(int askedCoordinate, int gridSize) {
+        if (askedCoordinate >= gridSize) return gridSize - 1;
+        else if (askedCoordinate < 0) return 0;
+        else return askedCoordinate;
     }
 
 

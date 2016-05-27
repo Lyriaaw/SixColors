@@ -15,6 +15,8 @@ public class Case {
 
     private CaseColor caseColor;
 
+    private int x, y;
+
 
 
 
@@ -24,6 +26,20 @@ public class Case {
         player = -1;
     }
 
+    /**
+     * Generate a random case
+     * @param x
+     * @param y
+     */
+    public Case(int x, int y) {
+        this.x = x;
+        this.y = y;
+
+        this.caseColor = CaseColor.getRandomCaseColor();
+        belonged = false;
+        player = -1;
+
+    }
 
     public Case(CaseColor caseColor) {
         this.caseColor = caseColor;
@@ -63,6 +79,29 @@ public class Case {
         this.caseColor = caseColor;
     }
 
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public CaseColor getCaseColor() {
+        return caseColor;
+    }
+
+    public void setCaseColor(CaseColor caseColor) {
+        this.caseColor = caseColor;
+    }
 
     public void setBelonged(int player, CaseColor caseColor) {
         belonged = true;
@@ -89,6 +128,37 @@ public class Case {
 
         return message;
 
+
+    }
+
+
+
+    public Case[][] infectNeighbour(Case[][] grid, Player player) {
+
+        int gridSize = grid.length;
+
+        if (!belonged) setBelonged(player.getId(), player.getCurrentCaseColor());
+        System.out.println("Searching in case[" + y + "][" + x + "]");
+
+        // run throw all the neighbours and infect them
+        for (int jt = y - 1; jt <= y + 1; jt++) {
+            for (int it = x - 1; it <= x + 1; it++) {
+                int xSearched = TableGame.getSafeCoordinate(it, gridSize);
+                int ySearched = TableGame.getSafeCoordinate(jt, gridSize);
+
+                // System.out.println("it = " + it + " jt = " + jt + " X = " + xSearched + " Y = " + ySearched);
+
+                if (xSearched != x && ySearched != y) {
+                    if (grid[ySearched][xSearched].getCaseColor() == getCaseColor()) {
+                        System.out.println("Searching in new case");
+                        grid[ySearched][xSearched].infectNeighbour(grid, player);
+                    }
+                }
+
+            }
+        }
+
+        return grid;
 
     }
 
