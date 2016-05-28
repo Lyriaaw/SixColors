@@ -146,7 +146,10 @@ public class TableGame {
     public void infectGridWithColor(Player player) {
 
         // start the infection from the first case of the pplayer
-        grid = currentPlayer.getBelongedCases().get(0).infectNeighbour(grid, player);
+        for (int it = 0; it < currentPlayer.getBelongedCases().size(); it++) {
+            grid = currentPlayer.getBelongedCases().get(it).infectNeighbour(grid, player);
+
+        }
 
         //displayGrid();
 

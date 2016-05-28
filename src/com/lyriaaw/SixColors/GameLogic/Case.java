@@ -137,7 +137,10 @@ public class Case {
 
         int gridSize = grid.length;
 
-        if (!belonged) setBelonged(player.getId(), player.getCurrentCaseColor());
+        if (!belonged){
+            setBelonged(player.getId(), player.getCurrentCaseColor());
+            player.addCase(this);
+        }
         System.out.println("Searching in case[" + y + "][" + x + "]");
 
         // run throw all the neighbours and infect them
@@ -148,8 +151,8 @@ public class Case {
 
                 // System.out.println("it = " + it + " jt = " + jt + " X = " + xSearched + " Y = " + ySearched);
 
-                if (xSearched != x && ySearched != y) {
-                    if (grid[ySearched][xSearched].getCaseColor() == getCaseColor()) {
+                if (xSearched != x || ySearched != y) {
+                    if (grid[ySearched][xSearched].getCaseColor() == getCaseColor() && !grid[ySearched][xSearched].isBelonged()) {
                         System.out.println("Searching in new case");
                         grid[ySearched][xSearched].infectNeighbour(grid, player);
                     }
